@@ -21,18 +21,18 @@ boardX = [
 ]
 
 board12 = [
-    [1, 1, 2, 2, 1, 0, 0, 1, 2, 1, 2, 2],
-    [2, 2, 1, 2, 2, 1, 2, 1, 1, 2, 1, 1],
-    [1, 1, 2, 1, 2, 0, 0, 2, 1, 1, 2, 2],
-    [2, 2, 1, 2, 1, 2, 1, 1, 2, 2, 1, 1],
-    [2, 2, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1],
-    [1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 2],
-    [1, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1],
-    [2, 2, 1, 1, 2, 1, 2, 1, 1, 2, 1, 2],
-    [1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 1, 2],
-    [2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 2, 1],
-    [1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 1, 2],
-    [2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1]
+    [2, 0, 2, 1, 0, 1, 0, 0, 2, 0, 0, 0],
+    [0, 0, 2, 2, 0, 0, 1, 0, 0, 1, 2, 0],
+    [2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2],
+    [0, 0, 1, 0, 0, 2, 0, 0, 2, 0, 0, 1],
+    [0, 0, 0, 2, 0, 0, 2, 0, 1, 1, 0, 0],
+    [1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 2, 0, 0, 1, 2, 0, 0],
+    [0, 0, 2, 2, 0, 0, 2, 0, 0, 0, 1, 0],
+    [2, 0, 1, 1, 2, 1, 2, 1, 0, 0, 2, 0],
+    [2, 0, 0, 2, 0, 0, 1, 2, 0, 0, 1, 2],
+    [0, 2, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 2, 0, 0, 1, 1, 0, 0, 0]
 ]
 
 
@@ -115,7 +115,7 @@ def checktrip(table):
                     continue
 
 # check for "impossibilities"
-def testforcollisions(table):
+def testforcollisions(table): # something fucky here.
     for i, row in enumerate(table):
         if row.count(0) == 2:
             for x in range(1, 2):
@@ -188,10 +188,10 @@ def runtestloop(table):
         if temp:
             table = temp
             i += 1
-        temp = testforcollisions(table)
-        if temp:
-            table = temp
-            i += 1
+        # temp = testforcollisions(table)
+        # if temp:
+        #     table = temp
+        #     i += 1
         if infloop == i:
             print(f"Test complete. Halted after {i} steps")
             print("")
@@ -206,7 +206,7 @@ def runtestloop(table):
 
 
 if __name__ == "__main__":
-    runtestloop(boardX)
+    runtestloop(board12)
     # [print(r) for r in board12]
     # print("")
     # board12 = testforcollisions(board12)
