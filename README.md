@@ -6,5 +6,5 @@ https://0hh1.com/
 
 ------
 
-######*-mid-developement comment:*
+*-mid-developement comment:*
 Okay so I found out that this game is actually called Takuzu. This resolver is specificially for the 0h h1 version but there's no reason why it won't work with any other version.
