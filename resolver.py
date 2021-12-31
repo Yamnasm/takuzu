@@ -1,40 +1,5 @@
-board4 = [
-    [0, 2, 1, 0],
-    [0, 0, 0, 2],
-    [0, 0, 1, 1],
-    [0, 0, 0, 0]
-]
-
-boardX = [
-    [0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 1],
-    [0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 0, 1],
-    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
-    [1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0],
-    [1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-    [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-    [0, 2, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0],
-    [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1],
-    [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 0, 0, 2, 0, 2, 0, 0, 0, 1]
-]
-
-board12 = [
-    [2, 0, 2, 1, 0, 1, 0, 0, 2, 0, 0, 0],
-    [0, 0, 2, 2, 0, 0, 1, 0, 0, 1, 2, 0],
-    [2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2],
-    [0, 0, 1, 0, 0, 2, 0, 0, 2, 0, 0, 1],
-    [0, 0, 0, 2, 0, 0, 2, 0, 1, 1, 0, 0],
-    [1, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 2, 0, 0, 1, 2, 0, 0],
-    [0, 0, 2, 2, 0, 0, 2, 0, 0, 0, 1, 0],
-    [2, 0, 1, 1, 2, 1, 2, 1, 0, 0, 2, 0],
-    [2, 0, 0, 2, 0, 0, 1, 2, 0, 0, 1, 2],
-    [0, 2, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0],
-    [1, 0, 1, 0, 2, 0, 0, 1, 1, 0, 0, 0]
-]
-
+import copy
+import testcases
 
 def lazy(value):
     if value == 1:
@@ -115,11 +80,12 @@ def checktrip(table):
                     continue
 
 # check for "impossibilities"
-def testforcollisions(table): # something fucky here.
+def testforcollisions(table):
     for i, row in enumerate(table):
+        temp = []
         if row.count(0) == 2:
             for x in range(1, 2):
-                temp = row
+                temp = copy.copy(row)
                 for ii, cell in enumerate(temp):
                     if cell == 0:
                         temp[ii] = x
@@ -127,26 +93,56 @@ def testforcollisions(table): # something fucky here.
                 for ii, cell in enumerate(temp):
                     if cell == 0:
                         temp[ii] = lazy(x)
+                        break
                 for k, comp in enumerate(table):
-                    if i != k:
+                    if k != 2:
                         if temp == comp:
-                            temp = row
-                            for ii, cell in enumerate(temp):
+                            temp = copy.copy(row)
+                            for kk, cell in enumerate(temp):
                                 if cell == 0:
-                                    temp[ii] = lazy(x)
+                                    temp[kk] = lazy(x)
                                     break
-                            for ii, cell in enumerate(temp):
+                            for kk, cell in enumerate(temp):
                                 if cell == 0:
-                                    temp[ii] = x
+                                    temp[kk] = x
+                                    break
                             table[i] = temp
-                            print(f"added pair on row {i}")
+                            print(f"added pair on row {i + 1}")
                             return table
+
+    table = list([list(a) for a in zip(*table)])
+    for i, row in enumerate(table):
+        temp = []
+        if row.count(0) == 2:
+            for x in range(1, 2):
+                temp = copy.copy(row)
+                for ii, cell in enumerate(temp):
+                    if cell == 0:
+                        temp[ii] = x
+                        break
+                for ii, cell in enumerate(temp):
+                    if cell == 0:
+                        temp[ii] = lazy(x)
+                        break
+                for k, comp in enumerate(table):
+                    if k != 2:
+                        if temp == comp:
+                            temp = copy.copy(row)
+                            for kk, cell in enumerate(temp):
+                                if cell == 0:
+                                    temp[kk] = lazy(x)
+                                    break
+                            for kk, cell in enumerate(temp):
+                                if cell == 0:
+                                    temp[kk] = x
+                                    break
+                            table[i] = temp
+                            print(f"added pair on row {i + 1}")
+                            return list([list(a) for a in zip(*table)])
 
 # check row and column totals
 def checkmax(table):
     for i, row in enumerate(table):
-        # print(f"{row.count(2)} twos and {row.count(0)} zeros.")
-        # print(int(len(row) / 2))
         if row.count(0) > 0:
             if row.count(1) == int(len(row) / 2):
                 table[i] = [2 if x == 0 else x for x in table[i]]
@@ -170,7 +166,7 @@ def checkmax(table):
                 return list([list(a) for a in zip(*table)])
     return None
 
-def runtestloop(table):
+def runsolveloop(table):
     [print(r) for r in table]
     print("")
     i = 0
@@ -188,10 +184,10 @@ def runtestloop(table):
         if temp:
             table = temp
             i += 1
-        # temp = testforcollisions(table)
-        # if temp:
-        #     table = temp
-        #     i += 1
+        temp = testforcollisions(table)
+        if temp:
+            table = temp
+            i += 1
         if infloop == i:
             print(f"Test complete. Halted after {i} steps")
             print("")
@@ -204,10 +200,5 @@ def runtestloop(table):
         print("")
         [print(r) for r in table]
 
-
 if __name__ == "__main__":
-    runtestloop(board12)
-    # [print(r) for r in board12]
-    # print("")
-    # board12 = testforcollisions(board12)
-    # [print(r) for r in board12]
+    runsolveloop(testcases.board12x12_a)
