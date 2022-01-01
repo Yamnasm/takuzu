@@ -161,11 +161,11 @@ def checkmax(table):
         if column.count(0) > 0:
             if column.count(1) == int(len(column) / 2):
                 table[i] = [2 if x == 0 else x for x in table[i]]
-                print(f"added 2s to col {i + 1}")
+                print(f"added 2s to column {i + 1}")
                 return list([list(a) for a in zip(*table)])
             if column.count(2) == int(len(column) / 2):
                 table[i] = [1 if x == 0 else x for x in table[i]]
-                print(f"added 1s to col {i + 1}")
+                print(f"added 1s to column {i + 1}")
                 return list([list(a) for a in zip(*table)])
     return None
 
@@ -202,19 +202,39 @@ def runsolveloop(table):
         print(f"Test completed after {i} steps")
         print("")
         [print(r) for r in table]
+        return table
 
 #testing functions:
-def is_table_valid(table):
-    for i, row in enumerate(table):
-        if table.count(row) > 1:
-            print(f"!!! Duplicate found on row {i + 1}")
+def is_board_valid(table):
+    def dupe_check(t):
+        for i, row in enumerate(t):
+            if t.count(row) > 1:
+                print(f"!!! Duplicate found on {ori} {i + 1}")
 
-    table = list([list(a) for a in zip(*table)])
-    for i, column in enumerate(table):
-        if table.count(column) > 1:
-            print(f"!!! Duplicate found on column {i + 1}")
+    def max_check(t):
+        for i, row in enumerate(t):
+            if row.count(1) > len(row) / 2:
+                print(f"!!! too many 1s on {ori} {i + 1}")
+            if row.count(2) > len(row) / 2:
+                print(f"!!! too many 2s on {ori} {i + 1}")
+
+    def triple_check(t):
+        for i, row in enumerate(t):
+            for ii, cell in enumerate(row[:-2]):
+                if cell != 0:
+                    if row[ii:ii + 3].count(cell) > 2:
+                        print(f"!!! three {cell}s on {ori} {i + 1}")
     
-def test_check(table):
+    ori = "row"
+    for i,_ in enumerate(range(2)):
+        if i == 1:
+            table = list([list(a) for a in zip(*table)])
+            ori = "column"
+        dupe_check(table)
+        max_check(table)
+        triple_check(table)
+    
+def test_single_check(table):
     [print(r) for r in table]
     print("")
     table = testforcollisions(table)
@@ -223,8 +243,16 @@ def test_check(table):
     except TypeError:
         print("check returned NoneType")
 
+def test_loop():
+    for testboard in [
+                    testcases.board12x12_DUPLICATE,
+                    testcases.board12x12_TOO_MANY,
+                    testcases.board12x12_TRIPLE_ERROR]:
+
+        is_board_valid(testboard)
+        print("")
+
 if __name__ == "__main__":
     board = board_import.get_board_from_html()
-    runsolveloop(board)
-    is_table_valid(board)
-    #test_check(testcases.board12x12_COMPLETE)
+    board = runsolveloop(board)
+    is_board_valid(board)
