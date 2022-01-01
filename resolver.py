@@ -1,5 +1,6 @@
 import copy
 import testcases
+import board_import
 
 def lazy(value):
     if value == 1:
@@ -19,13 +20,13 @@ def checkpairs(table):
                     if 0 not in check and len(check) == 2: #dodgy fix logic. bad.
                         if check.count(check[0]) == len(check):
                             table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {i + 1}:{ii + 1} (right)")
+                            print(f"added {lazy(check[0])} at x:{ii + 1} y:{i + 1} (double right)")
                             return table
                     check = row[ii - 2:ii]
                     if 0 not in check and len(check) == 2:
                         if check.count(check[0]) == len(check):
                             table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {i + 1}:{ii + 1} (left)")
+                            print(f"added {lazy(check[0])} at x:{ii + 1} y:{i + 1} (double left)")
                             return table
                 except IndexError:
                     continue
@@ -39,13 +40,13 @@ def checkpairs(table):
                     if 0 not in check and len(check) == 2: #dodgy fix logic. bad.
                         if check.count(check[0]) == len(check):
                             table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {ii + 1}:{i + 1} (down)")
+                            print(f"added {lazy(check[0])} at x:{ii + 1} y::{i + 1} (double down)")
                             return list([list(a) for a in zip(*table)])
                     check = row[ii - 2:ii]
                     if 0 not in check and len(check) == 2:
                         if check.count(check[0]) == len(check):
                             table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {ii + 1}:{i + 1} (up)")
+                            print(f"added {lazy(check[0])} at x:{ii + 1} y:{i + 1} (double up)")
                             return list([list(a) for a in zip(*table)])
                 except IndexError:
                     continue
@@ -56,12 +57,13 @@ def checktrip(table):
         for ii, cell in enumerate(row):
             if cell == 0:
                 try:
-                    check = [row[ii + 1], row[ii - 1]]
-                    if 0 not in check:
-                        if check.count(check[0]) == len(check):
-                            table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {i + 1}:{ii + 1}")
-                            return table
+                    if ii - 1 >= 0 and ii + 1 <= len(row):
+                        check = [row[ii + 1], row[ii - 1]]
+                        if 0 not in check:
+                            if check.count(check[0]) == len(check):
+                                table[i][ii] = lazy(check[0])
+                                print(f"added {lazy(check[0])} at x:{ii + 1} y:{i + 1} (pair horizontal)")
+                                return table
                 except IndexError:
                     continue
     
@@ -70,12 +72,13 @@ def checktrip(table):
         for ii, cell in enumerate(row):
             if cell == 0:
                 try:
-                    check = [row[ii + 1], row[ii - 1]]
-                    if 0 not in check: 
-                        if check.count(check[0]) == len(check):
-                            table[i][ii] = lazy(check[0])
-                            print(f"added {lazy(check[0])} at {ii + 1}:{i + 1}")
-                            return list([list(a) for a in zip(*table)])
+                    if ii - 1 >= 0 and ii + 1 <= len(row):
+                        check = [row[ii + 1], row[ii - 1]]
+                        if 0 not in check: 
+                            if check.count(check[0]) == len(check):
+                                table[i][ii] = lazy(check[0])
+                                print(f"added {lazy(check[0])} at x:{ii + 1} y:{i + 1}(pair vertical)")
+                                return list([list(a) for a in zip(*table)])
                 except IndexError:
                     continue
 
@@ -97,7 +100,6 @@ def testforcollisions(table):
                 for k, comp in enumerate(table):
                     if k != 2:
                         if temp == comp:
-                            print(f"match found at {k + 1}")
                             temp = copy.copy(row)
                             for kk, cell in enumerate(temp):
                                 if cell == 0:
@@ -211,7 +213,7 @@ def is_table_valid(table):
     for i, column in enumerate(table):
         if table.count(column) > 1:
             print(f"!!! Duplicate found on column {i + 1}")
-
+    
 def test_check(table):
     [print(r) for r in table]
     print("")
@@ -222,5 +224,7 @@ def test_check(table):
         print("check returned NoneType")
 
 if __name__ == "__main__":
-    runsolveloop(testcases.board12x12_b)
+    board = board_import.get_board_from_html()
+    runsolveloop(board)
+    is_table_valid(board)
     #test_check(testcases.board12x12_COMPLETE)
