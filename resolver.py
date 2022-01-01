@@ -84,7 +84,7 @@ def testforcollisions(table):
     for i, row in enumerate(table):
         temp = []
         if row.count(0) == 2:
-            for x in range(1, 2):
+            for x in range(1, 3):
                 temp = copy.copy(row)
                 for ii, cell in enumerate(temp):
                     if cell == 0:
@@ -97,6 +97,7 @@ def testforcollisions(table):
                 for k, comp in enumerate(table):
                     if k != 2:
                         if temp == comp:
+                            print(f"match found at {k + 1}")
                             temp = copy.copy(row)
                             for kk, cell in enumerate(temp):
                                 if cell == 0:
@@ -114,7 +115,7 @@ def testforcollisions(table):
     for i, row in enumerate(table):
         temp = []
         if row.count(0) == 2:
-            for x in range(1, 2):
+            for x in range(1, 3):
                 temp = copy.copy(row)
                 for ii, cell in enumerate(temp):
                     if cell == 0:
@@ -137,7 +138,7 @@ def testforcollisions(table):
                                     temp[kk] = x
                                     break
                             table[i] = temp
-                            print(f"added pair on row {i + 1}")
+                            print(f"added pair on column {i + 1}")
                             return list([list(a) for a in zip(*table)])
 
 # check row and column totals
@@ -200,5 +201,26 @@ def runsolveloop(table):
         print("")
         [print(r) for r in table]
 
+#testing functions:
+def is_table_valid(table):
+    for i, row in enumerate(table):
+        if table.count(row) > 1:
+            print(f"!!! Duplicate found on row {i + 1}")
+
+    table = list([list(a) for a in zip(*table)])
+    for i, column in enumerate(table):
+        if table.count(column) > 1:
+            print(f"!!! Duplicate found on column {i + 1}")
+
+def test_check(table):
+    [print(r) for r in table]
+    print("")
+    table = testforcollisions(table)
+    try:
+        [print(r) for r in table]
+    except TypeError:
+        print("check returned NoneType")
+
 if __name__ == "__main__":
-    runsolveloop(testcases.board12x12_a)
+    runsolveloop(testcases.board12x12_b)
+    #test_check(testcases.board12x12_COMPLETE)
