@@ -1,14 +1,32 @@
+import numpy as np
 import copy
 import testcases
 import board_import
 
+class TakuzuBoard():
+    def __init__(self):
+        self.table = np.array(board_import.get_board_from_html())
+
+    def get_rows(self):
+        return self.table
+    
+    def get_columns(self):
+        return self.table.transpose()
+
+    def solve(self):
+        return runsolveloop(self.table)
+
+def main():
+    # board = runsolveloop(board)
+    # is_board_valid(board)
+    board = TakuzuBoard()
+    print(board.solve())
+    
+
 def lazy(value):
     if value == 1:
         return 2
-    elif value == 2:
-        return 1
-    else:
-        return None
+    return 1
 
 # identify "local pairs".
 def checkpairs(table):
@@ -253,6 +271,4 @@ def test_loop():
         print("")
 
 if __name__ == "__main__":
-    board = board_import.get_board_from_html()
-    board = runsolveloop(board)
-    is_board_valid(board)
+    main()
